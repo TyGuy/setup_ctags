@@ -4,6 +4,7 @@ def accept?(message)
 end
 
 GIT_TEMPLATE_DEST = '~/.git_template/hooks'.freeze
+THE_LORDS_DIR = 'https://raw.githubusercontent.com/Lordnibbler/dotfiles/master/git_template/hooks'.freeze
 
 puts 'installing exuberant ctags via homebrew...'
 `brew install ctags`
@@ -30,10 +31,20 @@ puts 'creating git hooks for generating ctags on `git init`'
 
 puts 'getting some cool files from the internet and copying them to your filesystem'
 %w(ctags post-checkout post-commit post-merge post-rewrite).each do |hook_file|
-  puts `wget https://raw.githubusercontent.com/Lordnibbler/dotfiles/master/git_template/hooks/#{hook_file} \
+  puts `wget -nc #{THE_LORDS_DIR}/#{hook_file} \
     -P #{GIT_TEMPLATE_DEST}`
   `chmod +x #{GIT_TEMPLATE_DEST}/#{hook_file}`
 end
 
 # tell git you want to alias a command `git ctags`
 `git config --global alias.ctags '!.git/hooks/ctags'`
+
+puts '=' * 80
+puts '!!!END OF SCRIPT MESSAGE!!!'
+puts '=' * 80
+puts "You dun did it. Good job. Now, in each git repo, whenever you merge,
+commit, etc., a .tags file will be updated.\n"
+puts "* You can run `git init` or `git ctags` to generate this file once right now.\n"
+puts "* If you are an Atom user, use `apm install autocomplete-ctags` to unlock
+some dope features.\n"
+puts '=' * 80
